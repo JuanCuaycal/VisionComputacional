@@ -1,2 +1,2 @@
 # VisionComputacional
-# VisionComputacional
+# Ingenieía en Computación Gráfica
