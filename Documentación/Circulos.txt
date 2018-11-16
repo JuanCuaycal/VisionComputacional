@@ -1,0 +1,56 @@
+#Permite la detección
+#de círculos mediante la función de la transformada circular de Houg
+#de un dataset de 105 figuras geométricas básicas
+#el cual fue elaborado por los integrantes del grupo
+#Josselyn, Martin, Michael, Juan Carlos, Luis
+
+#impoertamos las diferentes librerias
+import cv2
+import numpy as np
+import csv
+
+#Extrae todos los contornos de una imagen
+with open('../data/nombres.csv', newline='') as File:  
+    reader= csv.reader(File)
+    for row in reader:
+        #imagen = cv2.imread("../dataset/m17.png") 
+        img = cv2.imread("../dataset/"+row[0]) 
+        img=cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
+        
+        #sacamos una copia de la imagen original
+        copia=img.copy()
+        #img = cv2.medianBlur(img,5)
+        # cv2.HoughCircles(imagen escakla de grises,HOUGH_GRADIENT#GRADIENTE,2,MIN dis entre los cir
+        #param )
+        #MANDAR A ESCALA DE GRISES 
+        try:
+            
+            #imgris = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
+            # cv2.HoughCircles devuevle los circulos  
+            print('entra')
+            circulos = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,2,50,
+                                        param1=90,param2=50,minRadius=10,maxRadius=90)
+            
+            #aplicamos el rednodneo, eto se debe a la represetnacion de una matriz 
+            circulos = np.uint16(np.around(circulos))
+            #aqui vamos a recorrer los circulos detectados  en una pisicon encuntra radio centro,etc
+            # por cada ciruculo
+            #va e cero asha q se acabe
+            for ciruloActual in circulos [0,:]:
+                #sacamos los centrs
+                centroX=ciruloActual[0]
+                centroY=ciruloActual[1]
+                #elradio tambine tiene el area
+                radio=ciruloActual[2]
+                #dibujamos(que matriz)
+                cv2.circle(copia,(centroX,centroY),radio,(0,255,255),2)
+                #cv2.imshow('resultado',copia)
+            cv2.imwrite("../salidaCirculos/"+row[0]+".jpg",copia)
+            
+            #cv2.waitKey(0)
+            #cv2.destroyAllWindows()
+        
+                
+        except:
+           # print('no entra')
+            cv2.imwrite("../salidaCirculos/"+row[0]+".jpg",img)
